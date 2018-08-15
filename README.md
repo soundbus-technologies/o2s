@@ -11,8 +11,8 @@ go get -u -v gopkg.in/oauth2.v3/errors
 go get -u -v github.com/satori/go.uuid
 go get -u -v github.com/codegangsta/inject
 
-go get -u -v github.com/go2s/o2r
-go get -u -v github.com/go2s/o2m
+go get -u -v github.com/soundbus-technologies/o2r
+go get -u -v github.com/soundbus-technologies/o2m
 
 cd http
 

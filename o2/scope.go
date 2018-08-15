@@ -4,7 +4,7 @@
 package o2
 
 import (
-	"github.com/go2s/o2x"
+	"github.com/soundbus-technologies/o2x"
 	"net/http"
 )
 

@@ -42,16 +42,17 @@
   revision = "22d885f9ecc78bf4ee5d72b937e4bbcdc58e8cae"
 
 [[projects]]
-  digest = "1:348ceb76f2ac958e541e4ba3190484b68df28c38ac9720ed4ef8d36af69ce52e"
+  digest = "1:748df8eda48a48d6d05ebb848a6cf966f846fa4e6179f8731385d04d7a287fc1"
   name = "github.com/gin-gonic/gin"
   packages = [
     ".",
     "binding",
+    "json",
     "render",
   ]
   pruneopts = ""
-  revision = "d459835d2b077e44f7c9b453505ee29881d5d12d"
-  version = "v1.2"
+  revision = "b869fe1415e4b9eb52f247441830d502aece2d4d"
+  version = "v1.3.0"
 
 [[projects]]
   digest = "1:a6cdfb0c4a4d3e0893e52d305685fff4c79b9199dcbf8f29b11218a0da761b70"
@@ -69,30 +70,6 @@
   pruneopts = ""
   revision = "480db94d33e6088e08d628833b6c0705451d24bb"
   version = "v6.13.2"
-
-[[projects]]
-  branch = "master"
-  digest = "1:fdc467859d5904a689111e839e9d825ad05384c92a12052d9a558b1178ad75a8"
-  name = "github.com/go2s/o2m"
-  packages = ["."]
-  pruneopts = ""
-  revision = "c6d3d148cd18cea441744b68060afeea7ed5683d"
-
-[[projects]]
-  branch = "master"
-  digest = "1:a1cc580235f5ed9eba71019b16fe6f3b63d86ac587bd29a0a9c90a83ffc53f12"
-  name = "github.com/go2s/o2r"
-  packages = ["."]
-  pruneopts = ""
-  revision = "f646a01481f5ce3cc66e4d9f3cdcb0a12a9f5cc6"
-
-[[projects]]
-  branch = "master"
-  digest = "1:c1fbc7aae5cd68c8e74162c1d4e542625508f8e370e717fb235593c78fd7e49d"
-  name = "github.com/go2s/o2x"
-  packages = ["."]
-  pruneopts = ""
-  revision = "c8c73af6966313b1f0555ae51595f9f2cbc3c28e"
 
 [[projects]]
   branch = "master"
@@ -156,6 +133,30 @@
   packages = ["."]
   pruneopts = ""
   revision = "36e9d2ebbde5e3f13ab2e25625fd453271d6522e"
+
+[[projects]]
+  branch = "master"
+  digest = "1:047138d6ffcd2cceef4a16ae922ecbb6e0f1e242cf1aab2430cb34c4460c1a4e"
+  name = "github.com/soundbus-technologies/o2m"
+  packages = ["."]
+  pruneopts = ""
+  revision = "047537e46c7ea9df4d5ebf29ae4240efb43429c1"
+
+[[projects]]
+  branch = "master"
+  digest = "1:c4691079c313a7dfdb454b606b783a0a980dd504169e910054d928ae879bc9f7"
+  name = "github.com/soundbus-technologies/o2r"
+  packages = ["."]
+  pruneopts = ""
+  revision = "f51a8405f1032c6016dce8eae5afff8cb796d4d2"
+
+[[projects]]
+  branch = "master"
+  digest = "1:0354c6ab2f0f728349898a4fb2e8c0bca64a6443d233186eec038a235e88c09a"
+  name = "github.com/soundbus-technologies/o2x"
+  packages = ["."]
+  pruneopts = ""
+  revision = "a9b127543b4623eff1baef5997d17b31a8841443"
 
 [[projects]]
   branch = "master"
@@ -237,11 +238,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:072dfe8c89af9499e94ba8174a3be40d1c217bc814662e57dda354e8fb47fac9"
+  digest = "1:b779cc85de245422bf70d8a21e6afcf3c0591eca64dc507feb9f054f64b21ab9"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = ""
-  revision = "98c5dad5d1a0e8a73845ecc8897d0bd56586511d"
+  revision = "4e1fef5609515ec7a2cee7b5de30ba6d9b438cbf"
 
 [[projects]]
   digest = "1:dd549e360e5a8f982a28c2bcbe667307ceffe538ed9afc7c965524f1ac285b3f"
@@ -314,10 +315,10 @@
     "github.com/awslabs/aws-lambda-go-api-proxy/gin",
     "github.com/gin-gonic/gin",
     "github.com/go-redis/redis",
-    "github.com/go2s/o2m",
-    "github.com/go2s/o2r",
-    "github.com/go2s/o2x",
     "github.com/golang/glog",
+    "github.com/soundbus-technologies/o2m",
+    "github.com/soundbus-technologies/o2r",
+    "github.com/soundbus-technologies/o2x",
     "gopkg.in/go-session/redis.v1",
     "gopkg.in/mgo.v2",
     "gopkg.in/oauth2.v3",

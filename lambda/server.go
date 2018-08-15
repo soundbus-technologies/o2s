@@ -8,16 +8,16 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/awslabs/aws-lambda-go-api-proxy/gin"
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/go2s/o2s/engine"
-	"github.com/go2s/o2s/o2"
-	"github.com/go2s/o2m"
+	"github.com/soundbus-technologies/o2s/engine"
+	"github.com/soundbus-technologies/o2s/o2"
+	"github.com/soundbus-technologies/o2m"
 	"gopkg.in/mgo.v2"
 	"github.com/golang/glog"
 	"flag"
 	"time"
-	"github.com/go2s/o2r"
+	"github.com/soundbus-technologies/o2r"
 	"github.com/go-redis/redis"
-	"github.com/go2s/o2s/captcha"
+	"github.com/soundbus-technologies/o2s/captcha"
 )
 
 var (

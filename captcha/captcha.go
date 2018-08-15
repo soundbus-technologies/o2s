@@ -5,12 +5,12 @@ package captcha
 
 import (
 	"net/http"
-	"github.com/go2s/o2x"
+	"github.com/soundbus-technologies/o2x"
 	"github.com/golang/glog"
 	"gopkg.in/oauth2.v3/errors"
 	"gopkg.in/oauth2.v3"
 	oauth2Error "gopkg.in/oauth2.v3/errors"
-	"github.com/go2s/o2s/o2"
+	"github.com/soundbus-technologies/o2s/o2"
 )
 
 type CaptchaSender func(mobile, captcha string) (err error)

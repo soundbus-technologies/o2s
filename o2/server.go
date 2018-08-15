@@ -9,7 +9,7 @@ import (
 	"gopkg.in/oauth2.v3/server"
 	"gopkg.in/oauth2.v3"
 
-	"github.com/go2s/o2x"
+	"github.com/soundbus-technologies/o2x"
 	"net/http"
 	oauth2Error "gopkg.in/oauth2.v3/errors"
 	"github.com/golang/glog"

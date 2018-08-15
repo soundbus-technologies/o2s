@@ -5,7 +5,7 @@ package o2
 
 import (
 	"gopkg.in/oauth2.v3"
-	"github.com/go2s/o2x"
+	"github.com/soundbus-technologies/o2x"
 )
 
 // ClientScopeHandler check the client allows to use scope

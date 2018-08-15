@@ -6,7 +6,7 @@ package o2
 import (
 	"net/http"
 	"gopkg.in/session.v2"
-	"github.com/go2s/o2x"
+	"github.com/soundbus-technologies/o2x"
 	"context"
 )
 

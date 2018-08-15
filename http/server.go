@@ -7,14 +7,14 @@ package main
 import (
 	"net/http"
 	"log"
-	"github.com/go2s/o2s/o2"
+	"github.com/soundbus-technologies/o2s/o2"
 	"gopkg.in/oauth2.v3/store"
-	"github.com/go2s/o2x"
-	"github.com/go2s/o2m"
+	"github.com/soundbus-technologies/o2x"
+	"github.com/soundbus-technologies/o2m"
 	"github.com/golang/glog"
 	"time"
 	"flag"
-	"github.com/go2s/o2s/captcha"
+	"github.com/soundbus-technologies/o2s/captcha"
 )
 
 const (

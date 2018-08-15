@@ -5,14 +5,14 @@
 package main
 
 import (
-	"github.com/go2s/o2s/o2"
-	"github.com/go2s/o2s/engine"
-	"github.com/go2s/o2x"
-	"github.com/go2s/o2r"
+	"github.com/soundbus-technologies/o2s/o2"
+	"github.com/soundbus-technologies/o2s/engine"
+	"github.com/soundbus-technologies/o2x"
+	"github.com/soundbus-technologies/o2r"
 	"github.com/go-redis/redis"
 	"github.com/golang/glog"
 	"time"
-	"github.com/go2s/o2s/captcha"
+	"github.com/soundbus-technologies/o2s/captcha"
 )
 
 const (

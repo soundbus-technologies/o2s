@@ -24,11 +24,11 @@
 #   unused-packages = true
 
 [[constraint]]
-  name = "github.com/go2s/o2m"
+  name = "github.com/soundbus-technologies/o2m"
   branch = "master"
 
 [[constraint]]
-  name = "github.com/go2s/o2r"
+  name = "github.com/soundbus-technologies/o2r"
   branch = "master"
 
 [[override]]

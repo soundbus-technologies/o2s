@@ -6,7 +6,7 @@ package o2
 
 import (
 	"gopkg.in/oauth2.v3/manage"
-	"github.com/go2s/o2x"
+	"github.com/soundbus-technologies/o2x"
 )
 
 const (

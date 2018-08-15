@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"gopkg.in/session.v2"
 	"context"
-	"github.com/go2s/o2x"
+	"github.com/soundbus-technologies/o2x"
 	oauth2Errors "gopkg.in/oauth2.v3/errors"
 )
 
