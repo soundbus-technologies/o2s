@@ -108,7 +108,15 @@ func RemoveUserProcessor(w http.ResponseWriter, r *http.Request) (err error) {
 	}
 
 	glog.Infof("client %v remove user %v", clientID, username)
+
+	//删除用户表
 	err = oauth2Svr.userStore.Remove(username)
+	if err != nil {
+		return
+	}
+
+	//删除token表
+	err = oauth2Svr.o2xTokenStore.RemoveByAccount(username,clientID)
 	if err != nil {
 		return
 	}
