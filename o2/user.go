@@ -116,10 +116,8 @@ func RemoveUserProcessor(w http.ResponseWriter, r *http.Request) (err error) {
 	}
 
 	//删除token表
-	errs := oauth2Svr.o2xTokenStore.RemoveByAccount(username,clientID)
-	if errs != nil && errs.Error()!="not found" {
-		return
-	}
+	oauth2Svr.o2xTokenStore.RemoveByAccount(username,clientID)
+
 	return
 }
 
