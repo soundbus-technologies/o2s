@@ -150,6 +150,14 @@ func BearerTokenValidator(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//查询数据库 看 token是否存在
+	nowToken, _ := oauth2Svr.BearerAuth(r)
+	tokenInfo,tokenErr :=oauth2Svr.o2xTokenStore.GetByAccess(nowToken)
+	if tokenErr!=nil || tokenInfo==nil{
+		ErrorResponse(w, tokenErr, http.StatusUnauthorized)
+		return
+	}
+
 	data := &o2x.ValidResponse{
 		ClientID: tg.GetClientID(),
 		UserID:   tg.GetUserID(),
