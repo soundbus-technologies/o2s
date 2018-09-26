@@ -22,23 +22,34 @@ func InitServerConfig(cfg *ServerConfig, mapper HandleMapper) {
 
 	mapper(http.MethodGet, cfg.UriContext+oauth2UriIndex, IndexHandler)
 
+	//登录
 	mapper(http.MethodGet, cfg.UriContext+oauth2UriLogin, LoginHandler)
 	mapper(http.MethodPost, cfg.UriContext+oauth2UriLogin, LoginHandler)
 
+	//授权
 	mapper(http.MethodGet, cfg.UriContext+oauth2UriAuth, AuthHandler)
 	mapper(http.MethodPost, cfg.UriContext+oauth2UriAuth, AuthHandler)
 
+	//
 	mapper(http.MethodGet, cfg.UriContext+oauth2UriAuthorize, AuthorizeRequestHandler)
 	mapper(http.MethodPost, cfg.UriContext+oauth2UriAuthorize, AuthorizeRequestHandler)
 
+	//获取token
 	mapper(http.MethodPost, cfg.UriContext+oauth2UriToken, TokenRequestHandler)
 
+	//检验
 	mapper(http.MethodGet, cfg.UriContext+oauth2UriValid, BearerTokenValidator)
 	mapper(http.MethodPost, cfg.UriContext+oauth2UriValid, BearerTokenValidator)
 
+	//新增用户
 	mapper(http.MethodPost, cfg.UriContext+oauth2UriUserAdd, AddUserHandler)
+	//删除用户
 	mapper(http.MethodPost, cfg.UriContext+oauth2UriUserRemove, HandleProcessor(RemoveUserProcessor))
+	//修改密码
 	mapper(http.MethodPost, cfg.UriContext+oauth2UriUserPass, HandleProcessor(UpdatePwdProcessor))
+	//校验密码
+	mapper(http.MethodPost, cfg.UriContext+oauth2UriUserPassCheck, HandleProcessor(CheckUserPassProcessor))
+	//修改scope
 	mapper(http.MethodPost, cfg.UriContext+oauth2UriUserScope, HandleProcessor(UpdateScopeProcessor))
 
 	InitTemplate()

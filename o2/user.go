@@ -146,6 +146,31 @@ func UpdatePwdProcessor(w http.ResponseWriter, r *http.Request) (err error) {
 	return
 }
 
+/**
+检查用户密码
+ */
+func CheckUserPassProcessor(w http.ResponseWriter, r *http.Request) (err error) {
+	clientID, err := ClientBasicAuth(r)
+	if err != nil {
+		return
+	}
+	username := username(r)
+	password := password(r)
+	if anyNil(username, password) {
+		err = o2x.ErrValueRequired
+		return
+	}
+	glog.Infof("client %v update password of user %v", clientID, username)
+
+	//开始检验用户密码
+	_, verr := PasswordAuthorizationHandler(username, password)
+	if verr != nil {
+		err = verr
+		return
+	}
+	return
+}
+
 // update scope processor
 func UpdateScopeProcessor(w http.ResponseWriter, r *http.Request) (err error) {
 	clientID, err := ClientBasicAuth(r)
