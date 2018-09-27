@@ -20,6 +20,7 @@ const (
 	oauth2UriValid      = "/valid"
 	oauth2UriUserAdd    = "/user"
 	oauth2UriUserRemove = "/user/remove"
+	oauth2UriUserRemoveToken = "/user/remove/token"
 	oauth2UriUserPass   = "/user/pass"
 	oauth2UriUserPassCheck   = "/user/pass/check"
 	oauth2UriUserScope  = "/user/scope"

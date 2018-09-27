@@ -45,6 +45,8 @@ func InitServerConfig(cfg *ServerConfig, mapper HandleMapper) {
 	mapper(http.MethodPost, cfg.UriContext+oauth2UriUserAdd, AddUserHandler)
 	//删除用户
 	mapper(http.MethodPost, cfg.UriContext+oauth2UriUserRemove, HandleProcessor(RemoveUserProcessor))
+	//删除用户下的token
+	mapper(http.MethodPost, cfg.UriContext+oauth2UriUserRemoveToken, HandleProcessor(RemoveUserAllTokenProcessor))
 	//修改密码
 	mapper(http.MethodPost, cfg.UriContext+oauth2UriUserPass, HandleProcessor(UpdatePwdProcessor))
 	//校验密码

@@ -121,6 +121,25 @@ func RemoveUserProcessor(w http.ResponseWriter, r *http.Request) (err error) {
 	return
 }
 
+// remove user all token processor
+func RemoveUserAllTokenProcessor(w http.ResponseWriter, r *http.Request) (err error) {
+	clientID, err := ClientBasicAuth(r)
+	if err != nil {
+		return
+	}
+
+	username := username(r)
+	if anyNil(username) {
+		err = o2x.ErrValueRequired
+		return
+	}
+	glog.Infof("client %v remove user %v", clientID, username)
+
+	//删除token表
+	oauth2Svr.o2xTokenStore.RemoveByAccount(username,clientID)
+	return
+}
+
 // update password processor
 func UpdatePwdProcessor(w http.ResponseWriter, r *http.Request) (err error) {
 	clientID, err := ClientBasicAuth(r)
