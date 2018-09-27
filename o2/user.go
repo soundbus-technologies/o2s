@@ -136,7 +136,7 @@ func RemoveUserAllTokenProcessor(w http.ResponseWriter, r *http.Request) (err er
 	glog.Infof("client %v remove user %v", clientID, username)
 
 	//删除token表
-	oauth2Svr.o2xTokenStore.RemoveByAccount(username,clientID)
+	oauth2Svr.o2xTokenStore.RemoveByAccountNoClient(username)
 	return
 }
 
