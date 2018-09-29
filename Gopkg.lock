@@ -110,7 +110,7 @@
   branch = "master"
   name = "github.com/soundbus-technologies/o2m"
   packages = ["."]
-  revision = "47082a1dee71d5ce55d19c7c01b8ef292f1655c4"
+  revision = "9475e99048cade9c1ab44afebd38156c5cd266cb"
 
 [[projects]]
   branch = "master"
@@ -122,7 +122,7 @@
   branch = "master"
   name = "github.com/soundbus-technologies/o2x"
   packages = ["."]
-  revision = "5c18ea79139e29f9c494f35977c620567f8f45cd"
+  revision = "0f1633d363235dc688e8fb27bb0cd3f4aa0dc475"
 
 [[projects]]
   branch = "master"
@@ -182,13 +182,13 @@
     "pbkdf2",
     "scrypt"
   ]
-  revision = "0e37d006457bf46f9e6692014ba72ef82c33022c"
+  revision = "5295e8364332db77d75fce11f1d19c053919a9c9"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "c2ed4eda69e7f62900806e4cd6e45f0429f859fa"
+  revision = "e4b3c5e9061176387e7cea65e4dc5853801f3fb7"
 
 [[projects]]
   name = "gopkg.in/go-playground/validator.v8"

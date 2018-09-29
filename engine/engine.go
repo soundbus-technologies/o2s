@@ -18,6 +18,7 @@ func GetGinEngine() *gin.Engine {
 	return ginEngine
 }
 
+//定义了所有处理方法的结构
 func GinMap(method, pattern string, handler func(w http.ResponseWriter, r *http.Request)) {
 	GetGinEngine().Handle(method, pattern, func(c *gin.Context) {
 		handler(c.Writer, c.Request)

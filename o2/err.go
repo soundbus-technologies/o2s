@@ -5,11 +5,12 @@
 package o2
 
 import (
-	"gopkg.in/oauth2.v3/errors"
 	"github.com/golang/glog"
 	"github.com/soundbus-technologies/o2x"
+	"gopkg.in/oauth2.v3/errors"
 )
 
+//错误处理
 func InternalErrorHandler(err error) (re *errors.Response) {
 	if herr, ok := err.(o2x.CodeError); ok {
 		re = &errors.Response{

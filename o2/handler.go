@@ -4,15 +4,17 @@
 package o2
 
 import (
-	"net/http"
-	"gopkg.in/session.v2"
-	"github.com/soundbus-technologies/o2x"
 	"context"
+	"github.com/soundbus-technologies/o2x"
+	"gopkg.in/session.v2"
+	"net/http"
 )
 
+//定义方法类型
 type HandleMapper func(method, pattern string, handler func(w http.ResponseWriter, r *http.Request))
 type HandleConfigurer func(mapper HandleMapper)
 
+//初始化服务配置
 func InitServerConfig(cfg *ServerConfig, mapper HandleMapper) {
 	if cfg != nil {
 		oauth2Cfg = cfg
@@ -21,19 +23,17 @@ func InitServerConfig(cfg *ServerConfig, mapper HandleMapper) {
 	}
 
 	mapper(http.MethodGet, cfg.UriContext+oauth2UriIndex, IndexHandler)
-
 	//登录
 	mapper(http.MethodGet, cfg.UriContext+oauth2UriLogin, LoginHandler)
 	mapper(http.MethodPost, cfg.UriContext+oauth2UriLogin, LoginHandler)
-
 	//授权
 	mapper(http.MethodGet, cfg.UriContext+oauth2UriAuth, AuthHandler)
 	mapper(http.MethodPost, cfg.UriContext+oauth2UriAuth, AuthHandler)
-
 	//
 	mapper(http.MethodGet, cfg.UriContext+oauth2UriAuthorize, AuthorizeRequestHandler)
 	mapper(http.MethodPost, cfg.UriContext+oauth2UriAuthorize, AuthorizeRequestHandler)
 
+	//====================以下是有用到的==================//
 	//获取token
 	mapper(http.MethodPost, cfg.UriContext+oauth2UriToken, TokenRequestHandler)
 
@@ -57,7 +57,8 @@ func InitServerConfig(cfg *ServerConfig, mapper HandleMapper) {
 	InitTemplate()
 }
 
-func HandleProcessor(processor func(w http.ResponseWriter, r *http.Request) (error)) func(w http.ResponseWriter, r *http.Request) {
+//调用处理方法并处理错误信息
+func HandleProcessor(processor func(w http.ResponseWriter, r *http.Request) error) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		err := processor(w, r)
 		if err != nil {
@@ -88,6 +89,7 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	execIndexTemplate(w, r, m)
 }
 
+//获取token
 func TokenRequestHandler(w http.ResponseWriter, r *http.Request) {
 	err := oauth2Svr.HandleTokenRequest(w, r)
 	if err != nil {
@@ -96,7 +98,9 @@ func TokenRequestHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+//从session中获取userId并检查用户在此clientId下的正确性
 func CheckUserAuth(w http.ResponseWriter, r *http.Request) (authorized bool, err error) {
+	//从session中获取userId
 	userID, err := oauth2Svr.UserAuthorizationHandler(w, r)
 	if err != nil {
 		return
@@ -108,6 +112,7 @@ func CheckUserAuth(w http.ResponseWriter, r *http.Request) (authorized bool, err
 	scope := scope(r)
 
 	if clientID != "" && scope != "" {
+		//查看这个用户在此clientId下的scope是否正确
 		authorized = oauth2Svr.authStore.Exist(&o2x.AuthModel{
 			ClientID: clientID,
 			UserID:   userID,
@@ -118,10 +123,11 @@ func CheckUserAuth(w http.ResponseWriter, r *http.Request) (authorized bool, err
 	return false, nil
 }
 
+//
 func AuthorizeRequestHandler(w http.ResponseWriter, r *http.Request) {
 	authorized, err := CheckUserAuth(w, r)
 	if err != nil || !authorized {
-		redirectToAuth(w, r)
+		redirectToAuth(w, r) //重新跳转到授权
 		return
 	}
 
@@ -138,6 +144,7 @@ func AuthorizeRequestHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//session中获取用户并删除用户在此clientId下的token
 func removeAuthToken(w http.ResponseWriter, r *http.Request) {
 	clientID := clientID(r)
 	if clientID == "" {
@@ -156,6 +163,7 @@ func removeAuthToken(w http.ResponseWriter, r *http.Request) {
 	oauth2Svr.o2xTokenStore.RemoveByAccount(userID, clientID)
 }
 
+//token校验处理
 func BearerTokenValidator(w http.ResponseWriter, r *http.Request) {
 	tg, validErr := oauth2Svr.ValidationBearerToken(r)
 	if validErr != nil {
@@ -163,20 +171,20 @@ func BearerTokenValidator(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//查询用户是否存在
-	user,userErr :=oauth2Svr.userStore.Find(tg.GetUserID())
-	if userErr!=nil || user==nil{
+	//查询token信息中的userId用户是否存在
+	user, userErr := oauth2Svr.userStore.Find(tg.GetUserID())
+	if userErr != nil || user == nil {
 		ErrorResponse(w, userErr, http.StatusUnauthorized)
 		return
 	}
 
 	//查询数据库 看 token是否存在
-	nowToken, _ := oauth2Svr.BearerAuth(r)
-	tokenInfo,tokenErr :=oauth2Svr.o2xTokenStore.GetByAccess(nowToken)
-	if tokenErr!=nil || tokenInfo==nil{
+	/*nowToken, _ := oauth2Svr.BearerAuth(r)
+	tokenInfo, tokenErr := oauth2Svr.o2xTokenStore.GetByAccess(nowToken)
+	if tokenErr != nil || tokenInfo == nil {
 		ErrorResponse(w, tokenErr, http.StatusUnauthorized)
 		return
-	}
+	}*/
 
 	data := &o2x.ValidResponse{
 		ClientID: tg.GetClientID(),

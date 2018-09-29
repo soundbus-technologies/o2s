@@ -5,11 +5,11 @@
 package o2
 
 import (
-	"net/http"
-	"gopkg.in/session.v2"
 	"context"
 	"github.com/soundbus-technologies/o2x"
 	oauth2Errors "gopkg.in/oauth2.v3/errors"
+	"gopkg.in/session.v2"
+	"net/http"
 )
 
 func AuthHandler(w http.ResponseWriter, r *http.Request) {
@@ -52,7 +52,9 @@ func AuthHandler(w http.ResponseWriter, r *http.Request) {
 	execAuthTemplate(w, r, m)
 }
 
+//根据请求获取clientId信息
 func ClientBasicAuth(r *http.Request) (cid string, err error) {
+	//拿到请求的clientId 和 密码
 	clientID, clientSecret, err := oauth2Svr.ClientInfoHandler(r)
 	if err != nil {
 		return
@@ -61,6 +63,8 @@ func ClientBasicAuth(r *http.Request) (cid string, err error) {
 		err = o2x.ErrValueRequired
 		return
 	}
+
+	//根据clientId获取client对象
 	cli, err := oauth2Mgr.GetClient(clientID)
 	if err != nil {
 		return

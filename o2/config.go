@@ -26,6 +26,9 @@ type ServerConfig struct {
 
 
 // ---------------------------
+/**
+默认server配置
+ */
 func DefaultServerConfig() *ServerConfig {
 	if defaultOauth2Cfg == nil {
 		defaultOauth2Cfg = &ServerConfig{

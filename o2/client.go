@@ -4,11 +4,11 @@
 package o2
 
 import (
-	"gopkg.in/oauth2.v3"
 	"github.com/soundbus-technologies/o2x"
+	"gopkg.in/oauth2.v3"
 )
 
-// ClientScopeHandler check the client allows to use scope
+//检查在此clientId下，此scope是否允许
 func ClientScopeHandler(clientID, scope string) (allowed bool, err error) {
 	if scope == "" {
 		allowed = true
@@ -26,6 +26,7 @@ func ClientScopeHandler(clientID, scope string) (allowed bool, err error) {
 	return
 }
 
+//判断这个grantType在此clientId下是否允许
 func ClientAuthorizedHandler(clientID string, grantType oauth2.GrantType) (allowed bool, err error) {
 	cli, err := oauth2Mgr.GetClient(clientID)
 	if err != nil {

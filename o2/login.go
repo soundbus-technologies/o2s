@@ -5,12 +5,13 @@
 package o2
 
 import (
-	"net/http"
-	"gopkg.in/session.v2"
 	"context"
+	"gopkg.in/session.v2"
 	"log"
+	"net/http"
 )
 
+//登录处理
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	store, err := session.Start(context.Background(), w, r)
 	if err != nil {

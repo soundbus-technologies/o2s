@@ -5,15 +5,15 @@
 package o2
 
 import (
+	"gopkg.in/oauth2.v3"
 	"gopkg.in/oauth2.v3/manage"
 	"gopkg.in/oauth2.v3/server"
-	"gopkg.in/oauth2.v3"
 
-	"github.com/soundbus-technologies/o2x"
-	"net/http"
-	oauth2Error "gopkg.in/oauth2.v3/errors"
-	"github.com/golang/glog"
 	"encoding/json"
+	"github.com/golang/glog"
+	"github.com/soundbus-technologies/o2x"
+	oauth2Error "gopkg.in/oauth2.v3/errors"
+	"net/http"
 )
 
 type Oauth2Server struct {
@@ -58,13 +58,15 @@ func (s *Oauth2Server) DisableMultipleUserToken() {
 	s.multipleUserTokenEnable = false
 }
 
-// ValidationTokenRequest the token request validation, add user client scope validation
+//token请求的校验，增加 用户scope的校验
 func (s *Oauth2Server) ValidationTokenRequest(r *http.Request) (gt oauth2.GrantType, tgr *oauth2.TokenGenerateRequest, err error) {
 	gt = oauth2.GrantType(r.FormValue("grant_type"))
 
 	if fn, ok := customGrantRequestValidatorMap[gt]; ok {
+		//自定义校验
 		gt, tgr, err = fn(r)
 	} else {
+		//校验密码等信息
 		gt, tgr, err = s.Server.ValidationTokenRequest(r)
 	}
 
@@ -81,6 +83,8 @@ func (s *Oauth2Server) ValidationTokenRequest(r *http.Request) (gt oauth2.GrantT
 	if err != nil {
 		return
 	}
+
+	//查看请求的scope是否在用户的scope列表中
 	scope, ok := user.GetScopes()[tgr.ClientID]
 	if ok && o2x.ScopeContains(scope, tgr.Scope) {
 		return
@@ -90,14 +94,16 @@ func (s *Oauth2Server) ValidationTokenRequest(r *http.Request) (gt oauth2.GrantT
 	return
 }
 
-// HandleTokenRequest token request handling
+//获取token的请求处理
 func (s *Oauth2Server) HandleTokenRequest(w http.ResponseWriter, r *http.Request) (err error) {
+	//先校验token的请求处理
 	gt, tgr, verr := s.ValidationTokenRequest(r)
 	if verr != nil {
 		err = s.tokenError(w, verr)
 		return
 	}
 
+	//获取token
 	ti, verr := s.GetAccessToken(gt, tgr)
 	if verr != nil {
 		err = s.tokenError(w, verr)
@@ -136,10 +142,12 @@ func (s *Oauth2Server) token(w http.ResponseWriter, data map[string]interface{},
 	return
 }
 
+//为自定义授权类型 绑定处理方法
 func (s *Oauth2Server) AddHandler(method, uri string, handler func(w http.ResponseWriter, r *http.Request)) {
 	s.mapper(method, s.cfg.UriContext+uri, handler)
 }
 
+//添加自定义授权类型
 func (s *Oauth2Server) AddCustomerGrantType(grantType oauth2.GrantType, validator GrantTypeRequestValidator, handleConfigurer HandleConfigurer) {
 	for _, t := range s.Config.AllowedGrantTypes {
 		if t == grantType {
@@ -156,19 +164,22 @@ func (s *Oauth2Server) AddCustomerGrantType(grantType oauth2.GrantType, validato
 }
 
 // ---------------------------
-func InitOauth2Server(cs oauth2.ClientStore, ts oauth2.TokenStore, us o2x.UserStore, as o2x.AuthStore,
-	cfg *ServerConfig, mapper HandleMapper) *Oauth2Server {
+//初始化oauth的服务
+func InitOauth2Server(cs oauth2.ClientStore, ts oauth2.TokenStore, us o2x.UserStore, as o2x.AuthStore, cfg *ServerConfig, mapper HandleMapper) *Oauth2Server {
 	if cs == nil || ts == nil || us == nil {
 		panic("store is nil")
 	}
 
+	//初始化服务配置
 	InitServerConfig(cfg, mapper)
 
 	oauth2Mgr = manage.NewDefaultManager()
 
+	//必须要有的tokenStore 和 clientStore
 	oauth2Mgr.MustTokenStorage(ts, nil)
 	oauth2Mgr.MustClientStorage(cs, nil)
 
+	//设置各种token的有效期限
 	DefaultTokenConfig(oauth2Mgr)
 
 	oauth2Svr = NewServer(&server.Config{
@@ -183,14 +194,13 @@ func InitOauth2Server(cs oauth2.ClientStore, ts oauth2.TokenStore, us o2x.UserSt
 		},
 	}, oauth2Mgr)
 
-	oauth2Svr.clientStore = cs
-	oauth2Svr.tokenStore = ts
-	oauth2Svr.userStore = us
-
 	if as == nil {
 		as = o2x.NewAuthStore()
 	}
 	oauth2Svr.authStore = as
+	oauth2Svr.clientStore = cs
+	oauth2Svr.tokenStore = ts
+	oauth2Svr.userStore = us
 
 	oauth2Svr.o2xTokenStore, oauth2Svr.o2xTokenAccountSupport = ts.(o2x.O2TokenStore)
 
@@ -198,14 +208,22 @@ func InitOauth2Server(cs oauth2.ClientStore, ts oauth2.TokenStore, us o2x.UserSt
 	oauth2Svr.mapper = mapper
 	// set cfg
 	oauth2Svr.cfg = cfg
-
 	oauth2Svr.SetAllowGetAccessRequest(true)
+
+	//=================设置各种处理的方法===============//
+	//basicToken转为clientId的处理
 	oauth2Svr.SetClientInfoHandler(server.ClientBasicHandler)
+	//密码校验方法
 	oauth2Svr.SetPasswordAuthorizationHandler(PasswordAuthorizationHandler)
+	//从session中获取userId的授权处理方法
 	oauth2Svr.SetUserAuthorizationHandler(userAuthorizeHandler)
+	//错误信息处理
 	oauth2Svr.SetInternalErrorHandler(InternalErrorHandler)
+	//响应错误处理，打印日志
 	oauth2Svr.SetResponseErrorHandler(ResponseErrorHandler)
+	//检测client下的scope是否允许
 	oauth2Svr.SetClientScopeHandler(ClientScopeHandler)
+	//检测client下的grantType是否允许
 	oauth2Svr.SetClientAuthorizedHandler(ClientAuthorizedHandler)
 	oauth2Svr.SetRefreshingScopeHandler(RefreshingScopeHandler)
 	oauth2Svr.SetAuthorizeScopeHandler(AuthorizeScopeHandler)

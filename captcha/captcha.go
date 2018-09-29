@@ -4,13 +4,13 @@
 package captcha
 
 import (
-	"net/http"
-	"github.com/soundbus-technologies/o2x"
 	"github.com/golang/glog"
-	"gopkg.in/oauth2.v3/errors"
-	"gopkg.in/oauth2.v3"
-	oauth2Error "gopkg.in/oauth2.v3/errors"
 	"github.com/soundbus-technologies/o2s/o2"
+	"github.com/soundbus-technologies/o2x"
+	"gopkg.in/oauth2.v3"
+	"gopkg.in/oauth2.v3/errors"
+	oauth2Error "gopkg.in/oauth2.v3/errors"
+	"net/http"
 )
 
 type CaptchaSender func(mobile, captcha string) (err error)
@@ -42,6 +42,7 @@ func SendCaptchaHandler(w http.ResponseWriter, r *http.Request) {
 	o2.HttpResponse(w, "ok", http.StatusOK)
 }
 
+//发送短信处理
 func SendCaptcha(w http.ResponseWriter, r *http.Request) (err error) {
 	mobile := r.FormValue("mobile")
 	if mobile == "" {

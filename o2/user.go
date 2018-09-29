@@ -5,15 +5,16 @@
 package o2
 
 import (
-	"net/http"
-	"gopkg.in/session.v2"
 	"context"
-	"github.com/soundbus-technologies/o2x"
 	"github.com/golang/glog"
+	"github.com/soundbus-technologies/o2x"
+	"gopkg.in/session.v2"
+	"net/http"
 
 	oauth2Error "gopkg.in/oauth2.v3/errors"
 )
 
+//从session中获取userId
 func userAuthorizeHandler(w http.ResponseWriter, r *http.Request) (userID string, err error) {
 	store, err := session.Start(context.Background(), w, r)
 	if err != nil {
@@ -28,11 +29,15 @@ func userAuthorizeHandler(w http.ResponseWriter, r *http.Request) (userID string
 	return
 }
 
+//密码校验，传入userId和被校验的密码
 func PasswordAuthorizationHandler(username, password string) (userID string, err error) {
+	//先利用userId查询用户信息
 	u, err := oauth2Svr.userStore.Find(username)
 	if err != nil {
 		return
 	}
+
+	//然后校验密码
 	if u != nil && u.Match(password) {
 		uid := u.GetUserID()
 		return o2x.UserIdString(uid)
@@ -41,7 +46,7 @@ func PasswordAuthorizationHandler(username, password string) (userID string, err
 	return
 }
 
-// add new user handler
+// 新增用户操作
 func AddUserHandler(w http.ResponseWriter, r *http.Request) {
 	err := AddUserProcessor(w, r)
 	if err != nil {
@@ -95,7 +100,7 @@ func AddUserProcessor(w http.ResponseWriter, r *http.Request) (err error) {
 	return
 }
 
-// remove user processor
+// 删除用户操作
 func RemoveUserProcessor(w http.ResponseWriter, r *http.Request) (err error) {
 	clientID, err := ClientBasicAuth(r)
 	if err != nil {
@@ -116,12 +121,13 @@ func RemoveUserProcessor(w http.ResponseWriter, r *http.Request) (err error) {
 	}
 
 	//删除token表
-	oauth2Svr.o2xTokenStore.RemoveByAccount(username,clientID)
+	oauth2Svr.o2xTokenStore.RemoveByAccountNoClient(username)
 
 	return
 }
 
-// remove user all token processor
+// 删除用户下的所有token；
+// clientId 没有使用
 func RemoveUserAllTokenProcessor(w http.ResponseWriter, r *http.Request) (err error) {
 	clientID, err := ClientBasicAuth(r)
 	if err != nil {
@@ -140,12 +146,13 @@ func RemoveUserAllTokenProcessor(w http.ResponseWriter, r *http.Request) (err er
 	return
 }
 
-// update password processor
+// 修改用户密码
 func UpdatePwdProcessor(w http.ResponseWriter, r *http.Request) (err error) {
 	clientID, err := ClientBasicAuth(r)
 	if err != nil {
 		return
 	}
+
 	username := username(r)
 	password := password(r)
 	if anyNil(username, password) {
@@ -165,9 +172,8 @@ func UpdatePwdProcessor(w http.ResponseWriter, r *http.Request) (err error) {
 	return
 }
 
-/**
-检查用户密码
- */
+//检查用户密码，如果密码正确则返回成功；如果不正确则返回错误；
+// clientId 没用
 func CheckUserPassProcessor(w http.ResponseWriter, r *http.Request) (err error) {
 	clientID, err := ClientBasicAuth(r)
 	if err != nil {
@@ -190,7 +196,7 @@ func CheckUserPassProcessor(w http.ResponseWriter, r *http.Request) (err error) 
 	return
 }
 
-// update scope processor
+// 更新用户scope
 func UpdateScopeProcessor(w http.ResponseWriter, r *http.Request) (err error) {
 	clientID, err := ClientBasicAuth(r)
 	if err != nil {
@@ -209,6 +215,7 @@ func UpdateScopeProcessor(w http.ResponseWriter, r *http.Request) (err error) {
 		return
 	}
 
+	//检查当前的scope在这个client下是否允许
 	allow, err := oauth2Svr.ClientScopeHandler(clientID, scope)
 	if err != nil {
 		return
@@ -218,6 +225,7 @@ func UpdateScopeProcessor(w http.ResponseWriter, r *http.Request) (err error) {
 		return
 	}
 
+	//更新操作
 	err = oauth2Svr.userStore.UpdateScope(u.GetUserID(), clientID, scope)
 	if err != nil {
 		return

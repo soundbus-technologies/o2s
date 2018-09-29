@@ -5,16 +5,17 @@
 package o2
 
 import (
-	"net/http"
-	"html/template"
-	"path/filepath"
 	"github.com/golang/glog"
+	"html/template"
+	"net/http"
+	"path/filepath"
 )
 
 var loginTemplate *template.Template
 var authTemplate *template.Template
 var indexTemplate *template.Template
 
+//初始化网页模板
 func InitTemplate() {
 	layout, err := oneFilePath("layout.html")
 	if err != nil || layout == "" {
@@ -55,14 +56,17 @@ func oneFilePath(name string) (path string, err error) {
 	return
 }
 
+//执行登录的模板
 func execLoginTemplate(w http.ResponseWriter, r *http.Request, data map[string]interface{}) {
 	execTemplate(w, r, loginTemplate, "layout", data)
 }
 
+//执行授权的模板
 func execAuthTemplate(w http.ResponseWriter, r *http.Request, data map[string]interface{}) {
 	execTemplate(w, r, authTemplate, "layout", data)
 }
 
+//执行首页的模板
 func execIndexTemplate(w http.ResponseWriter, r *http.Request, data map[string]interface{}) {
 	execTemplate(w, r, indexTemplate, "layout", data)
 }
