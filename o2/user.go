@@ -86,7 +86,9 @@ func AddUserProcessor(w http.ResponseWriter, r *http.Request) (err error) {
 	}
 
 	if scope != "" {
-		user.Scopes[clientID] = scope
+		scopeMap := make(map[string]string)
+		scopeMap[clientID] = scope
+		user.Scopes = scopeMap
 	}
 
 	user.SetRawPassword(password)
